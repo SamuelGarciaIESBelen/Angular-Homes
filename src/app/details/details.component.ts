@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { HousingService } from '../housing.service';
 import { HousingLocation } from '../housinglocation';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-details',
@@ -33,11 +33,28 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
         <form [formGroup]="applyForm" (submit)="submitApplication()">
           <label for="first-name">First Name</label>
           <input id="first-name" type="text" formControlName="firstName" />
+          <p *ngIf="applyForm.get('firstName')?.invalid && (applyForm.get('firstName')?.touched)"
+              style="color: red; margin-bottom: 10px">
+            First name is obligatory
+          </p>
+
           <label for="last-name">Last Name</label>
           <input id="last-name" type="text" formControlName="lastName" />
+          <p *ngIf="applyForm.get('lastName')?.invalid && (applyForm.get('lastName')?.touched)"
+              style="color: red; margin-bottom: 10px">
+            Last name is obligatory
+          </p>
+
           <label for="email">Email</label>
           <input id="email" type="email" formControlName="email" />
-          <button type="submit" class="primary">Apply now</button>
+          <p *ngIf="applyForm.get('email')?.invalid && (applyForm.get('email')?.touched)"
+              style="color: red; margin-bottom: 10px">
+            Incorrect email format
+          </p>
+          
+          <button *ngIf="applyForm.valid" type="submit" class="primary">Apply now</button>
+          <button style="background-color: lightgrey; border-color: lightgrey"
+              *ngIf="!applyForm.valid" type="submit" class="primary">Apply now</button>
         </form>
       </section>
     </article>
@@ -48,12 +65,7 @@ export class DetailsComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   housingService = inject(HousingService);
   housingLocation: HousingLocation | undefined;
-  applyForm = new FormGroup({
-    firstName: new FormControl(''),
-    lastName: new FormControl(''),
-    email: new FormControl(''),
-  });
-
+  
   constructor() {
     const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
     
@@ -62,11 +74,23 @@ export class DetailsComponent {
     });
   }
   
+  applyForm = new FormGroup({
+    firstName: new FormControl(localStorage.getItem("firstName"), Validators.required),
+    lastName: new FormControl(localStorage.getItem("lastName"), Validators.required),
+    email: new FormControl(localStorage.getItem("email"), [Validators.required, Validators.email]),
+  });
+  
   submitApplication() {
-    this.housingService.submitApplication(
-      this.applyForm.value.firstName ?? '',
-      this.applyForm.value.lastName ?? '',
-      this.applyForm.value.email ?? '',
-    );
+    if (this.applyForm.valid) {
+      this.housingService.submitApplication(
+        this.applyForm.value.firstName ?? '',
+        this.applyForm.value.lastName ?? '',
+        this.applyForm.value.email ?? '',
+      );
+      localStorage.setItem("formData", JSON.stringify(this.applyForm.value));
+      localStorage.setItem("firstName", this.applyForm.value.firstName ?? "");
+      localStorage.setItem("lastName", this.applyForm.value.lastName ?? "");
+      localStorage.setItem("email", this.applyForm.value.email ?? "");
+    }
   }
 }
