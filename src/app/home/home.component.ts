@@ -4,9 +4,11 @@ import { HousingLocationComponent } from '../housing-location/housing-location.c
 import { HousingLocation } from '../housinglocation';
 import { HousingService } from '../housing.service';
 
+import { RouterLink } from '@angular/router';
+
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, HousingLocationComponent],
+  imports: [CommonModule, HousingLocationComponent, RouterLink],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })

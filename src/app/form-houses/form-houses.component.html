@@ -1,0 +1,66 @@
+<div style="display: flex; flex-direction: column">
+  <h1 style="text-align: center; margin-top: 20px; margin-bottom: 50px;">Add a new home</h1>
+  <form style="margin: auto; display: flex; flex-direction: column;" [formGroup]="createForm" (submit)="submit()">
+    <p>{{ createForm.value | json }}</p>
+
+    <label style="font-weight: bold;" for="name">Name</label>
+    <input id="name" type="text" formControlName="name" />
+    <p *ngIf="createForm.get('name')?.invalid && (createForm.get('name')?.touched)"
+      style="color: red; margin-bottom: 10px">
+      Name is obligatory
+    </p>
+
+    <label style="margin-top: 15px; font-weight: bold;" for="city">City</label>
+    <input id="city" type="text" formControlName="city" />
+    <p *ngIf="createForm.get('city')?.invalid && (createForm.get('city')?.touched)"
+      style="color: red; margin-bottom: 10px">
+      City is obligatory
+    </p>
+
+    <label style="margin-top: 15px; font-weight: bold;" for="state">State</label>
+    <input id="state" type="state" formControlName="state" />
+    <p *ngIf="createForm.get('state')?.invalid && (createForm.get('state')?.touched)"
+      style="color: red; margin-bottom: 10px">
+      State is obligatory
+    </p>
+
+    <label style="margin-top: 15px; font-weight: bold;" for="units">Units</label>
+    <input id="units" type="number" formControlName="units" />
+    <div *ngIf="createForm.get('units')?.invalid && (createForm.get('units')?.touched)">
+      <p *ngIf="createForm.get('units')?.errors?.['required']" style="color: red; margin-bottom: 10px">
+        Units is obligatory
+      </p>
+      <p *ngIf="createForm.get('units')?.errors?.['min']" style="color: red; margin-bottom: 10px">
+        Units must be over 0
+      </p>
+    </div>
+
+    <div style="margin-top: 15px; font-weight: bold;">
+      <label for="wifi">WiFi</label>
+      <input style="margin-left: 5px;" type="checkbox" name="wifi" id="wifi" formControlName="wifi">
+    </div>
+
+    <div style="margin-top: 15px; font-weight: bold;">
+      <label for="laundry">Laundry</label>
+      <input style="margin-left: 5px;" type="checkbox" name="laundry" id="laundry"
+        formControlName="laundry">
+    </div>
+
+    <label style="margin-top: 15px; margin-bottom: 5px; font-weight: bold;" for="security">Security</label>
+    <div style="margin-bottom: 20px;">
+      <input type="checkbox" name="security" id="alarm" value="alarm" formControlName="security"> Alarm
+      <input style="margin-left: 10px;" type="checkbox" name="security" id="camera" value="camera"
+        formControlName="security"> Camera
+      <input style="margin-left: 10px;" type="checkbox" name="security" id="reinforced door" value="reinforced door"
+        formControlName="security"> Reinforced door
+      <input style="margin-left: 10px;" type="checkbox" name="security" id="smoke detector" value="smoke detector"
+        formControlName="security"> Smoke detector
+    </div>
+
+    <div style="margin: auto;">
+      <button *ngIf="createForm.valid" type="submit" class="primary">Add home</button>
+      <button style="background-color: lightgrey; border-color: lightgrey" *ngIf="!createForm.valid" type="submit"
+        class="primary">Add home</button>
+    </div>
+  </form>
+</div>

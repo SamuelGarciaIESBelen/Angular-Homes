@@ -1,7 +1,8 @@
 <section>
-    <form>
-      <input type="text" placeholder="Filter by city" #filter />
-      <button class="primary" type="button" (click)="filterResults(filter.value)">Search</button>
+  <form>
+    <input type="text" placeholder="Filter by city" #filter />
+    <button class="primary" type="button" (click)="filterResults(filter.value)">Search</button>
+    <button style="margin-left: 100px; cursor: pointer;" class="primary" [routerLink]="['/create']">Add a new home</button>
     </form>
   </section>
   <section class="results">
